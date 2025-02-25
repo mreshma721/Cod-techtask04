@@ -1,0 +1,22 @@
+from pulp import LpMaximize, LpProblem, LpVariable
+
+# Step 1: Define the Problem
+model = LpProblem(name="profit-maximization", sense=LpMaximize)
+
+# Step 2: Define Decision Variables
+product_A = LpVariable(name="Product_A", lowBound=0, cat="Integer")
+product_B = LpVariable(name="Product_B", lowBound=0, cat="Integer")
+
+# Step 3: Define Objective Function (Maximize Profit)
+model += 50 * product_A + 40 * product_B, "Total Profit"
+
+# Step 4: Define Constraints (Resources Available)
+model += 5 * product_A + 3 * product_B <= 100, "Labor Constraint"
+model += 2 * product_A + 2 * product_B <= 50, "Material Constraint"
+
+# Step 5: Solve the Model
+model.solve()
+
+# Step 6: Display Results
+print(f"Optimal Production: Product_A = {product_A.varValue}, Product_B = {product_B.varValue}")
+print(f"Maximum Profit: ${model.objective.value()}")
